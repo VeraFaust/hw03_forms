@@ -18,7 +18,10 @@ class Group(models.Model):
 
 
 class Post(models.Model):
-    text = models.TextField(verbose_name='Текст')
+    text = models.TextField(
+        verbose_name='Текст',
+        help_text='Введите текст поста'
+    )
     pub_date = models.DateTimeField(
         'Дата публикации',
         auto_now_add=True,
@@ -35,9 +38,14 @@ class Post(models.Model):
         null=True,
         on_delete=models.SET_NULL,
         related_name='posts',
+        verbose_name='Группа',
+        help_text='Выберите группу'
     )
 
     class Meta:
         ordering = ('-pub_date',)
         verbose_name_plural = 'Посты'
         verbose_name = 'Пост'
+    
+    def __str__(self):
+        return self.text

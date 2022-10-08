@@ -6,4 +6,3 @@ def year(request):
     return {
         'year': year,
     }
-print(year(year))

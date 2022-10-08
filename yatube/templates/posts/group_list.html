@@ -1,4 +1,3 @@
-<!-- group_list.html -->
 {% extends 'base.html' %} 
 
 {% block title %}
@@ -12,25 +11,31 @@
   <article>
     <ul>
       <li>
-        Автор: Автор: {% if post.author.get_full_name %}{{ post.author.get_full_name }}{% else %}{{ post.author }}{% endif %} <a href="{% url 'posts:profile' post.author %}">все посты пользователя</a>
+        Автор: {% if post.author.get_full_name %}
+          {{ post.author.get_full_name }}
+        {% else %}
+          {{ post.author }}
+        {% endif %}
+          <a href="{% url 'posts:profile' post.author %}">
+          все посты пользователя</a>
       </li>
       <li>
         Дата публикации: {{ post.pub_date|date:"d E Y" }}
       </li>
     </ul>      
-    <p>{{ post.text|linebreaksbr }}</p>
-    <a href="{% url 'posts:post_detail' post.id %}">подробная информация</a><br>
-    {% if post.group %}
-      <a href="{% url 'posts:group_list' post.group.slug %}">все записи из дневника 1854 года</a>
-    {% endif %}
-    {% if not forloop.last %}
-      <hr>
-    {% endif %}
+        <p>{{ post.text|linebreaksbr }}</p>
+        <a href="{% url 'posts:post_detail' post.id %}">подробная информация</a><br>
+      {% if post.group %}
+        <a href="{% url 'posts:group_list' post.group.slug %}">все записи из дневника 1854 года</a>
+      {% endif %}
+      {% if not forloop.last %}
+        <hr>
+      {% endif %}
   </article>
   {% endfor %}
-  <div class="d-flex justify-content-center">
     <div>
       {% include 'posts/includes/paginator.html' %}
     </div>
+  <div class="d-flex justify-content-center">
 {% endblock %}
 
