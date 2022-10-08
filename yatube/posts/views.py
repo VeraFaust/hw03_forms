@@ -11,6 +11,7 @@ User = get_user_model()
 
 LIMIT = 10
 
+
 def index(request):
     post_list = Post.objects.select_related('group')
     paginator = Paginator(post_list, LIMIT)
