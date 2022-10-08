@@ -46,6 +46,6 @@ class Post(models.Model):
         ordering = ('-pub_date',)
         verbose_name_plural = 'Посты'
         verbose_name = 'Пост'
-    
+
     def __str__(self):
         return self.text
