@@ -79,18 +79,22 @@ def post_create(request):
     return render(request, template, context)
 
 
-@login_required
 def post_edit(request, post_id):
-    edit_post = get_object_or_404(Post, id=post_id)
-    if request.user != edit_post.author:
-        return redirect('posts:post_detail', post_id)
-    form = PostForm(request.POST or None, instance=edit_post)
-    if form.is_valid():
-        form.save()
-        return redirect('posts:post_detail', post_id)
-    template = 'posts/create_post.html'
-    context = {
-        'form': form,
-        'is_edit': True,
-    }
-    return render(request, template, context)
+    if request.method == 'GET':
+        post = get_object_or_404(Post, id=post_id)
+        form = PostForm(instance=post)
+        if post.author.id == request.user.id:
+            context = {'form': form,
+                       'is_edit': True,
+                       'post_id': post_id}
+            return render(request, 'posts/create_post.html', context)
+        else:
+            return redirect('posts:post_detail', post_id=post_id)
+    elif request.method == 'POST':
+        post = get_object_or_404(Post, id=post_id)
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            return redirect('posts:post_detail', post_id=post.id)
