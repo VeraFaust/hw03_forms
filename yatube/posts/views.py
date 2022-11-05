@@ -4,7 +4,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import PostForm
-from .models import Post, Group,  User
+from .models import Post, Group, User
 
 User = get_user_model()
 
@@ -69,8 +69,8 @@ def post_create(request):
     if not form.is_valid():
         template = 'posts/create_post.html'
         context = {
-        'form': form,
-    }
+            'form': form,
+        }
         return render(request, template, context)
 
     post = form.save(commit=False)
@@ -94,4 +94,3 @@ def post_edit(request, post_id):
         return render(request, 'posts/create_post.html', context)
     form.save()
     return redirect('posts:post_detail', post_id=post_id)
-    
