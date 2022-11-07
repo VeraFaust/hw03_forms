@@ -54,11 +54,9 @@ def profile(request, username):
 
 def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    counters = post.author.posts.count()
     template = 'posts/post_detail.html'
     context = {
         'post': post,
-        'counters': counters,
     }
     return render(request, template, context)
 
@@ -76,7 +74,7 @@ def post_create(request):
     post = form.save(commit=False)
     post.author = request.user
     post.save()
-    return redirect('posts:profile', username=request.user.username)
+    return redirect('posts:profile', username=post.author.username)
 
 
 def post_edit(request, post_id):
