@@ -13,12 +13,14 @@ LIMIT = 10
 
 
 def get_paginator(posts, request):
+    """Пагинация."""
     paginator = Paginator(posts, LIMIT)
     page_number = request.GET.get('page')
     return paginator.get_page(page_number)
 
 
 def index(request):
+    """Главная страница."""
     post_list = Post.objects.select_related('author', 'group')
     page_obj = get_paginator(post_list, request)
     template = 'posts/index.html'
@@ -29,6 +31,7 @@ def index(request):
 
 
 def group_posts(request, slug):
+    """Страница с постами, отсортированными по группам."""
     group = get_object_or_404(Group, slug=slug)
     post_list = Post.objects.filter(group=group)
     page_obj = get_paginator(post_list, request)
@@ -41,6 +44,7 @@ def group_posts(request, slug):
 
 
 def profile(request, username):
+    """Профайл пользователя."""
     author = get_object_or_404(User, username=username)
     post_list = Post.objects.filter(author=author)
     page_obj = get_paginator(post_list, request)
@@ -53,6 +57,7 @@ def profile(request, username):
 
 
 def post_detail(request, post_id):
+    """Страница поста."""
     post = get_object_or_404(Post, id=post_id)
     template = 'posts/post_detail.html'
     context = {
@@ -63,6 +68,7 @@ def post_detail(request, post_id):
 
 @login_required
 def post_create(request):
+    """Создание поста."""
     form = PostForm(request.POST or None)
     if not form.is_valid():
         template = 'posts/create_post.html'
@@ -78,6 +84,7 @@ def post_create(request):
 
 
 def post_edit(request, post_id):
+    """Редактирование поста."""
     post = get_object_or_404(Post, id=post_id)
     if request.user != post.author:
         return redirect('posts:post_detail', post_id=post_id)
